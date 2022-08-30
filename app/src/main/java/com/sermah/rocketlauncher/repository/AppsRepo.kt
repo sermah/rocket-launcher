@@ -10,6 +10,10 @@ import com.sermah.rocketlauncher.data.AppInfo
 
 object AppsRepo {
 
+    private var _apps: List<AppInfo> = listOf()
+    val apps: List<AppInfo>
+        get() = _apps
+
     private fun retrievePackagesList(context: Context): List<ResolveInfo> {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -28,8 +32,8 @@ object AppsRepo {
         )
     }
 
-    fun loadAppsList(context: Context): List<AppInfo> {
-        return retrievePackagesList(context).map {
+    fun loadAppsList(context: Context) {
+        _apps = retrievePackagesList(context).map {
             val (label, icon) = loadLabelIcon(context, it)
             AppInfo(
                 label = label,
@@ -37,7 +41,8 @@ object AppsRepo {
                 packageName = it.activityInfo.packageName,
                 activityName = it.activityInfo.name
             )
-        }
+        }.sortedWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it.label }
+        )
     }
-
 }
