@@ -8,11 +8,10 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import com.sermah.rocketlauncher.data.AppInfo
 
-object AppsRepo {
+object AppsManager {
 
     private var _apps: List<AppInfo> = listOf()
-    val apps: List<AppInfo>
-        get() = _apps
+    val apps: List<AppInfo> get() = _apps
 
     private fun retrievePackagesList(context: Context): List<ResolveInfo> {
         val mainIntent = Intent(Intent.ACTION_MAIN, null)
